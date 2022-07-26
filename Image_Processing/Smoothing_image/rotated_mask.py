@@ -28,12 +28,13 @@ def rotated_mask(img,ksize=3,border=cv2.BORDER_REPLICATE):
             output_image[r,c]=averages[index]
     print("TIME TAKEN :{:.2f}".format(time.time()-start))
     return output_image[ksize:h,ksize:w]
-def main():
-    pass
-if __name__=="__main__":
-    orgimg=cv2.imread("G:\Computer_Vision\Image_Processing\Sample_images\messi5.jpg",0)
+def _main():
+    orgimg=cv2.imread("messi5.jpg",0)
     cv2.imshow("FILTEDRED IMAGE",rotated_mask(orgimg))
     cv2.imshow("ORG IMAGE",orgimg)
     cv2.waitKey(0)
+if __name__=="__main__":
+    _main()
+    
 
     

@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 HIST_SIZE=256
-def  Mode_hsit(img,minimum_peak=20):
+def  Mode_hist(img,minimum_peak=20):
     hist=cv2.calcHist([img],[0],None,[HIST_SIZE],(0,255),accumulate = False)
 
     hist=[(i,val) for i,val in enumerate(hist.reshape(-1))]
@@ -11,7 +11,7 @@ def  Mode_hsit(img,minimum_peak=20):
         if bigest_val-val>minimum_peak:
             return cv2.threshold(img,(bigest_val+val)//2,255,0)
     return cv2.threshold(img,(bigest_val+hist[-1][0])//2,255,0)
-def Muilty_hist(img,minimum_peak=20):
+def Multi_hist(img,minimum_peak=20):
     hist=cv2.calcHist([img],[0],None,[HIST_SIZE],(0,255),accumulate = False)
 
     hist=[(i,val) for i,val in enumerate(hist.reshape(-1))]
@@ -51,13 +51,16 @@ def hyst_thresh(edge_img: np.array, high_thresh: float=200, low_thresh: float=10
         if not any(k1*k2):
             matrix[y, z] = 0 
     return matrix
-if __name__=="__main__":
+def _main():
     import os
-    folder="G:\Learning_python\opencv\images"
+    folder="images"
     for img in os.listdir(folder):
         if os.path.splitext(img)[1] in [".jpg",".png"]:
             orgimg=cv2.imread(os.path.join(folder,img),0)
-            cv2.imshow("FILTEDRED IMAGE",Muilty_hist(orgimg))
+            cv2.imshow("FILTEDRED IMAGE",Multi_hist(orgimg))
             cv2.imshow("ORG IMAGE",orgimg)
             cv2.waitKey(0)
+if __name__=="__main__":
+    _main()
+    
             

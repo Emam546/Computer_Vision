@@ -2,8 +2,8 @@ import cv2
 import numpy as np
 import math
 HIST_SIZE=256
-def adabtive_hist_equ(src,kernal=(8,8)):
-    pady,padx=math.floor(kernal[1]/2),math.floor(kernal[0]/2)
+def adaptive_hist_equ(src,kernel=(8,8)):
+    pady,padx=math.floor(kernel[1]/2),math.floor(kernel[0]/2)
     new_image=cv2.copyMakeBorder(src,pady,padx,pady,padx,cv2.BORDER_REPLICATE)
     un_defiend_image=np.zeros_like(src,"uint8")
     h,w=new_image.shape
@@ -19,7 +19,7 @@ def adabtive_hist_equ(src,kernal=(8,8)):
             #print(rank,x)
    # print(total_region)
     return un_defiend_image
-def equlization(src):
+def equalization(src):
     hist=cv2.calcHist([src],[0],None,[HIST_SIZE],(0,255),accumulate = False)
     total_num=src.shape[1]*src.shape[0]
     return [round(255*sum([int(hist[i][0])/total_num for i in range(256)]))]
@@ -67,10 +67,10 @@ def hist_match(original, specified):
 
     return b[bin_idx].reshape(oldshape)
 if __name__=="__main__":
-    img=cv2.imread(r"D:\Learning\Computer_Vision\Image_Processing\Contrast_streching\stretch_original.jpg",0)  
+    img=cv2.imread(r".\Image_Processing\Contrast_streching\stretch_original.jpg",0)  
     cv2.imshow("ORG IMAGE",img)
     equalized_image=cv2.equalizeHist(img)
     cv2.imshow("EQUALIZED IMAGE",equalized_image)
-    adaptive_hist=adabtive_hist_equ(img,(60,60))
+    adaptive_hist=adaptive_hist_equ(img,(60,60))
     cv2.imshow("ADAPTIVE EQUALIZED IMAGE",adaptive_hist)
     cv2.waitKey(0)

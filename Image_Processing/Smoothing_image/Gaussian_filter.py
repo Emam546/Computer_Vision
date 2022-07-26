@@ -16,7 +16,7 @@ def getGaussianKernel(d, sigma):
         for i,vi in enumerate(range(-pad,pad+1)):
             kernel[j,i]=_gaussian(vj,vi,sigma=sigma)
     return kernel/np.sum(kernel)
-def Gaussina_blur(src,d,sigma,borderType):
+def Gaussian_blur(src,d,sigma,borderType):
     
     kernel=getGaussianKernel(d,sigma)
     return cv2.filter2D(src,-1,kernel,borderType=borderType)
@@ -36,7 +36,7 @@ def getGaussianKernel(d=5, sigma=1.):
     gauss = np.exp(-0.5 * np.square(ax) / np.square(sigma))
     kernel = np.outer(gauss, gauss)/100
     return kernel / np.sum(kernel)
-if __name__=="__main__":
+def _main():
     sigma=1
     size=3
     kernel=getGaussianKernel(size,sigma)
@@ -44,6 +44,9 @@ if __name__=="__main__":
     kernal2=np.dot(kernal2,kernal2.T)
     print(kernal2,kernel,sep="\n")
     print(np.sum(kernel),np.sum(kernal2))
+if __name__=="__main__":
+    _main()
+    
     # img=cv2.imread(r"D:\Learning\Learning_python\opencv\images\messi5.jpg")
     # blured=cv2.filter2D(img,-1,kernel)
     # blured_2=cv2.filter2D(img,-1,kernal2)

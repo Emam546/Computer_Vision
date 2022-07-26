@@ -8,12 +8,13 @@ def negative_trans(src):
 def gamma_trans(src,gamma=0.2):
     (255/log2(1+np.max(src)))*(src.astype(np.float)**gamma)
     
-
-if __name__=="__main__":
+def _main():
     import os
-    dirname="D:\G_MOVED\Learning_python\opencv\images"
+    dirname="images"
     for path in os.listdir(dirname):
         img=cv2.imread(os.path.join(dirname,path))
         cv2.imshow("STRECHED IMAGE",log_trans(img))
         cv2.imshow("ORG IMAGE",img)
         cv2.waitKey(0)
+if __name__=="__main__":
+    _main()

@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 from skimage import color
-
+from skimage.segmentation import clear_border
 
 
 
@@ -11,7 +11,7 @@ def Mark_analysis(src,mask,precentage=0.2):
     kernel = np.ones((3,3),np.uint8)
     opening = cv2.morphologyEx(mask,cv2.MORPH_OPEN,kernel, iterations = 2)
     dist_transform = cv2.distanceTransform(opening,cv2.DIST_L2,3)
-    from skimage.segmentation import clear_border
+    
     opening = clear_border(opening) 
     sure_bg = cv2.dilate(opening,kernel,iterations=2)
     _, sure_fg = cv2.threshold(dist_transform,precentage*dist_transform.max(),255,0)

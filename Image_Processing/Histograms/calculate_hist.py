@@ -14,7 +14,6 @@ def display_histograme(bgr_planes:list,names=NAMES):
 
     for i_h,(windowname,hist) in enumerate(zip(names,histograms)):
         histImage=np.zeros((HIST_H,HIST_W,3),"uint8")
-      
         cv2.normalize(hist, hist, alpha=0, beta=HIST_H, norm_type=cv2.NORM_MINMAX)
         
         for i in range(1, HIST_SIZE):
@@ -29,9 +28,9 @@ def equlization(src):
     output_img=src.copy()
     total_num=src.shape[1]*src.shape[0]
     for l in range(HIST_SIZE):
-       output_img[src==l]=round(HIST_SIZE*sum([int(hist[i][0])/total_num for i in range(l+1)]))
+        output_img[src==l]=round(HIST_SIZE*sum([int(hist[i][0])/total_num for i in range(l+1)]))
     return output_img
- 
+
 def equal_hist(src):
     hist=np.zeros(HIST_SIZE,)
     s_values, s_counts = np.unique(src,return_counts=True)
@@ -39,16 +38,18 @@ def equal_hist(src):
     s_quantiles = np.cumsum(hist).astype(np.float64)
     s_quantiles /= s_quantiles[-1]
     return  np.around(s_quantiles*255)
-
-_path=os.path.join(os.path.dirname(__file__),"Sample_images/messi5.jpg")
-img=cv2.imread(_path,0)
-bgr_planes = cv2.split(img)
-#display_histograme([img],["ORG IMG"])
-frist_img,scond_img=cv2.equalizeHist(img),equlization(img)
-display_histograme([frist_img],["EQUALIZED IMAGE"])
-display_histograme([scond_img],["MY EQUALIZED IMAGE"])
-cv2.imshow("EQUALIZE IMAGE",frist_img)
-cv2.imshow("MY_EQUALIZED IMAGE",scond_img)
-print(ARE_EQUALE(frist_img,scond_img))
-cv2.waitKey(0)
+def __main():
+    _path=os.path.join(os.path.dirname(__file__),"Sample_images/messi5.jpg")
+    img=cv2.imread(_path,0)
+    bgr_planes = cv2.split(img)
+    #display_histograme([img],["ORG IMG"])
+    frist_img,scond_img=cv2.equalizeHist(img),equlization(img)
+    display_histograme([frist_img],["EQUALIZED IMAGE"])
+    display_histograme([scond_img],["MY EQUALIZED IMAGE"])
+    cv2.imshow("EQUALIZE IMAGE",frist_img)
+    cv2.imshow("MY_EQUALIZED IMAGE",scond_img)
+    print(ARE_EQUALE(frist_img,scond_img))
+    cv2.waitKey(0)
+if __name__=="__main__":
+    __main()
         

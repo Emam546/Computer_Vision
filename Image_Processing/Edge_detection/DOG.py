@@ -3,7 +3,7 @@ import cv2
 import sys,os
 sys.path.append(r"D:\Learning\Computer_Vision\Image_Processing")
 from Smoothing_image.Gaussian_filter import getGaussianKernel
-Images_path=r"D:\Learning\Learning_python\opencv\images"
+Images_path=r"images"
 name_window="DIFF_IMAGE"
 cv2.namedWindow(name_window)
 
@@ -27,13 +27,11 @@ def __test():
         cv2.imshow("IMAGE",src)
         
         cv2.waitKey(0)
-    
-         
+
     #img_path=os.path.join(Images_path,"")
-    src=cv2.imread(r"D:\Learning\Learning_python\opencv\images\messi5.jpg",0)
+    src=cv2.imread(r"messi5.jpg",0)
     change_trackbar(cv2.getTrackbarPos("Sigma",name_window),cv2.getTrackbarPos("Size",name_window))
-        
-        
+
 def __test_2():
     for name in os.listdir(Images_path):
         img_path=os.path.join(Images_path,name)

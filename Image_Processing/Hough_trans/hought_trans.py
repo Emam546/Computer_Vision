@@ -2,20 +2,7 @@ import cv2
 import numpy as np
 import math
 def hough_line(img, angle_step=1, lines_are_white=True, value_threshold=5):
-    """
-    Hough transform for lines
-    Input:
-    img - 2D binary image with nonzeros representing edges
-    angle_step - Spacing between angles to use every n-th angle
-                 between -90 and 90 degrees. Default step is 1.
-    lines_are_white - boolean indicating whether lines to be detected are white
-    value_threshold - Pixel values above or below the value_threshold are edges
-    Returns:
-    accumulator - 2D array of the hough transform accumulator
-    theta - array of angles used in computation, in radians.
-    rhos - array of rho values. Max size is 2 times the diagonal
-           distance of the input image.
-    """
+
     # Rho and Theta ranges
     thetas = np.deg2rad(np.arange(-90.0, 90.0, angle_step))
     width, height = img.shape

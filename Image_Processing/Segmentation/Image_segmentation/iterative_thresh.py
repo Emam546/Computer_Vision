@@ -22,10 +22,9 @@ def iterative_thresh(img):
         bg_pix=img[mask==0].reshape(-1)
         bg=np.sum(bg_pix)/len(bg_pix)
         
-
-if __name__=="__main__":
+def _main():
     import os
-    folder="G:\Learning_python\opencv\images"
+    folder="images"
     for img in os.listdir(folder):
         if os.path.splitext(img)[1] in [".jpg",".png"]:
             orgimg=cv2.imread(os.path.join(folder,img),0)
@@ -34,3 +33,6 @@ if __name__=="__main__":
             cv2.imshow("FILTEDRED IMAGE",cv2.threshold(orgimg,thresh,255,0)[1])
             cv2.imshow("ORG IMAGE",orgimg)
             cv2.waitKey(0)
+if __name__=="__main__":
+    _main()
+    

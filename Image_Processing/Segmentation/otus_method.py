@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-_COLOS=[0,0,0]
+_COLORS=[0,0,0]
 HIST_SIZE=256
 NAMES=["BLUE CHANNEL","GREEN CHANNEL","RED CHANNEL"]
 HIST_H,HIST_W=100,500
@@ -11,11 +11,10 @@ def display_histograme(bgr_planes:list,names=NAMES):
 
     for i_h,(windowname,hist) in enumerate(zip(names,histograms)):
         histImage=np.zeros((HIST_H,HIST_W,3),"uint8")
-      
         cv2.normalize(hist, hist, alpha=0, beta=HIST_H, norm_type=cv2.NORM_MINMAX)
         
         for i in range(1, HIST_SIZE):
-            color=_COLOS.copy()
+            color=_COLORS.copy()
             color[i_h]=255
             pos=(bin_w*(i-1), HIST_H - int(hist[i-1]) ),( bin_w*(i), HIST_H ) 
             cv2.rectangle(histImage,*pos ,color, thickness=-1)
@@ -23,7 +22,7 @@ def display_histograme(bgr_planes:list,names=NAMES):
         cv2.imshow(windowname,histImage)
         
     raise StopIteration
-def thres_finder(src,thresh,delta_T=1.0):
+def thresh_finder(src,thresh,delta_T=1.0):
     x_low, y_low = np.where(src<=thresh)
     x_high, y_high = np.where(src>thresh)
     mean_low = np.mean(src[x_low,y_low])
@@ -33,10 +32,10 @@ def thres_finder(src,thresh,delta_T=1.0):
     if abs(new_thres-thresh)< delta_T:
         return new_thres
     else:
-        return thres_finder(src, thres=new_thres,delta_T=delta_T)
+        return thresh_finder(src, thres=new_thres,delta_T=delta_T)
 
 
-def balanced_hist_thresholding(b):
+def balanced_hist_threshing(b):
     # Starting point of histogram
     i_s = np.min(np.where(b[0]>0))
     # End point of histogram
@@ -74,7 +73,7 @@ def otsus_method(hist):
     cols=np.arange(hist.size,dtype=np.float)
     
     tot_pix=np.sum(hist)
-    variences=[]
+    variances=[]
     for thresh in range(1,hist.size-1):
         bg_pix=np.sum(hist[:thresh])
         fg_pix=np.sum(hist[thresh:])
@@ -83,15 +82,15 @@ def otsus_method(hist):
         Ub=np.sum(cols[:thresh]*hist[:thresh])/bg_pix
         Uf=np.sum(cols[thresh:]*hist[thresh:])/fg_pix
         var=Wb*Wf*((Ub-Uf)**2)
-        variences.append(var)
-    print(variences)
-    variences=np.nan_to_num(variences,False)
-    return np.argmax(variences)+1
+        variances.append(var)
+    print(variances)
+    variances=np.nan_to_num(variances,False)
+    return np.argmax(variances)+1
 def otsus_2_method(hist):
     hist.reshape(-1).astype(np.float)
     cols=np.arange(hist.size,dtype=np.float)
     tot_pix=np.sum(hist)
-    variences=[]
+    variances=[]
     for thresh in range(1,hist.size-1):
         bg_pix=np.sum(hist[:thresh])
         fg_pix=np.sum(hist[thresh:])
@@ -103,10 +102,10 @@ def otsus_2_method(hist):
         Qb=np.sum(((cols[:thresh]-Ub)**2)*hist[:thresh])/bg_pix
         Qf=np.sum(((cols[thresh:]-Uf)**2)*hist[thresh:])/fg_pix
         var=Wb*(Qb**2)+Wf*(Qf**2)
-        variences.append(var)
+        variances.append(var)
     
-    variences=np.nan_to_num(variences,False,np.inf)
-    return np.argmin(variences)+1
+    variances=np.nan_to_num(variances,False,np.inf)
+    return np.argmin(variances)+1
         
 
 
@@ -120,7 +119,7 @@ def __test():
     print(hist.size)
     print("start")
     start=time.time()
-    thresh=balanced_hist_thresholding(hist)
+    thresh=balanced_hist_threshing(hist)
     print("end time",time.time()-start)
     thresh_img=cv2.threshold(img,thresh,255,0)[1]
     cv2.imshow("THRESH",thresh_img)

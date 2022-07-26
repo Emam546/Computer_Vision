@@ -42,11 +42,10 @@ def bilateralFilter(src, d,sigmaColor, sigmaSpace,  borderType):
             weights=kernel*diff_gaussian
             new_img[cy,cx]=np.sum(weights*M)/np.sum(weights)
     return new_img
-
-if __name__=="__main__":
+def _main():
     from pycv2.img.utils import resizeimage_keeprespective
     sigma_color,sigma_spitial,d=20,20,7
-    img= cv2.imread("D:\Learning\Learning_python\opencv\images\Desert.jpg",0)
+    img= cv2.imread("Desert.jpg",0)
     img=resizeimage_keeprespective(img,height=300)
     blured=bilateralFilter(img,d,sigma_color,sigma_spitial,cv2.BORDER_REPLICATE)
     blured_2=cv2.bilateralFilter(img,d,sigma_color,sigma_spitial,cv2.BORDER_REPLICATE)
@@ -55,3 +54,6 @@ if __name__=="__main__":
     cv2.imshow("BILATERRAL_OPENCV",blured_2)
     cv2.imshow("DIFF",cv2.threshold(cv2.absdiff(blured,img),0,255,0)[1])
     cv2.waitKey(0)
+if __name__=="__main__":
+    _main()
+    

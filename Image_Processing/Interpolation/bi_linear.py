@@ -18,7 +18,6 @@ def resize_bilinear(src,xratio,yratio):
         for x in range(w):
             y1,y2=floor(y*yratio),floor((y+1)*yratio)
             x1,x2=floor(x*xratio),floor((x+1)*xratio)
-          
             for (rx1,xi),rx2 in zip(enumerate(range(x1,x2)),range(x2-x1,0,-1)):
                 img[y2,xi]=(src[y+1,x]*rx2+src[y+1,x+1]*rx1)/(x2-x1)
             
@@ -28,9 +27,8 @@ def resize_bilinear(src,xratio,yratio):
     
 
     return img.astype("uint8")
-
-if __name__=="__main__":
-    img=cv2.imread("G:\Computer_Vision\Image_Processing\Sample_images\messi5.jpg")
+def __main():
+    img=cv2.imread("messi5.jpg")
     result=resize_bilinear(img,2,2)
     h,w=result.shape[:2]
     org_img=cv2.resize(img,(w,h))
@@ -38,3 +36,5 @@ if __name__=="__main__":
     print(result[-1,-1],org_img[-1,-1])
     cv2.imshow("RESIZED IMAGE",result)
     cv2.waitKey(0)
+if __name__=="__main__":
+    __main()
