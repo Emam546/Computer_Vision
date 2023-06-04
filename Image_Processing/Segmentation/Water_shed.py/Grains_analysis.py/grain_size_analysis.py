@@ -7,14 +7,14 @@ from skimage.segmentation import clear_border
 
 pixels_to_um = 0.5 # 1 pixel = 500 nm (got this from the metadata of original image)
 
-def Mark_analysis(src,mask,precentage=0.2):
+def Mark_analysis(src,mask,percentage=0.2):
     kernel = np.ones((3,3),np.uint8)
     opening = cv2.morphologyEx(mask,cv2.MORPH_OPEN,kernel, iterations = 2)
     dist_transform = cv2.distanceTransform(opening,cv2.DIST_L2,3)
     
     opening = clear_border(opening) 
     sure_bg = cv2.dilate(opening,kernel,iterations=2)
-    _, sure_fg = cv2.threshold(dist_transform,precentage*dist_transform.max(),255,0)
+    _, sure_fg = cv2.threshold(dist_transform,percentage*dist_transform.max(),255,0)
     #Remove edge touching grains
     #Check the total regions found before and after applying this. 
     sure_fg=np.uint8(sure_fg)
@@ -40,19 +40,35 @@ def __test():
 
     _, thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY+cv2.THRESH_OTSU)
     
-    def show(precentage):
-        markers=Mark_analysis(img,thresh,precentage/10)
+    def show(percentage):
+        markers=Mark_analysis(img,thresh,percentage/10)
         print(len(np.unique(markers))-1)
         img2 = color.label2rgb(markers, bg_label=0)
         img2[markers == -1] = [0,255,255]
         cv2.imshow('Colored Grains', img2)  
     cv2.namedWindow('Colored Grains')
-    cv2.createTrackbar("PRECENT",'Colored Grains',1,10,show)
+    cv2.createTrackbar("percent",'Colored Grains',1,10,show)
     show(1)
     cv2.imshow('Overlay on original image', img)
     cv2.waitKey(0)
+    
+def resize_img(src, width: int | None = None, height: int | None = None, percent=None, inter: int = cv2.INTER_AREA):
+    if percent != None:
+        return cv2.resize(src, (0, 0), None, percent, percent, interpolation=inter)
+    (h, w) = src.shape[:2]
+    if width is None and height is None:
+        return src
+    elif width is None and height is not None:
+        r = height / float(h)
+        dim = (int(w * r), height)
+    elif width is not None:
+        r = width / float(w)
+        dim = (width, int(h * r))
+    else :
+        raise Exception("Width is not defined")
+    resized = cv2.resize(src, dim, interpolation=inter)
+    return resized
 def __test_2():
-    from pycv2.img.utils import resize_img
     img = cv2.imread("Osteosarcoma_01.tif")
     img=resize_img(img,600)
 
@@ -68,14 +84,14 @@ def __test_2():
 
     _, thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY+cv2.THRESH_OTSU)
     cv2.imshow("THRESH",thresh)
-    def show(precentage):
-        markers=Mark_analysis(img,thresh,precentage/10)
+    def show(percentage):
+        markers=Mark_analysis(img,thresh,percentage/10)
         print(len(np.unique(markers))-1)
         img2 = color.label2rgb(markers, bg_label=0)
         img2[markers == -1] = [0,0,0]
         cv2.imshow('Colored Grains', img2)  
     cv2.namedWindow('Colored Grains')
-    cv2.createTrackbar("PRECENT",'Colored Grains',1,10,show)
+    cv2.createTrackbar("percent",'Colored Grains',1,10,show)
     show(1)
     cv2.imshow('Overlay on original image', img)
     cv2.waitKey(0)

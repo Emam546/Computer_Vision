@@ -16,7 +16,7 @@ def sharpe_Laplacian(src):
     
 
 def __test():
-    img=cv2.imread(r"D:\Learning\Learning_python\opencv\images\messi5.jpg")
+    img=cv2.imread("./images/messi5.jpg")
     #blurred_img=cv2.blur(img,(7,7))
     window_name="SHARPEN_IMAGE"
     def sharpened_image(val):
@@ -31,14 +31,14 @@ def __test():
     cv2.imshow("BLURED IMAGE",img)
     cv2.waitKey(0)
 def __test_2():
-    img=cv2.imread(r"D:\Learning\Learning_python\opencv\images\messi5.jpg")
+    img=cv2.imread("./images/messi5.jpg")
     #img=cv2.blur(img,(7,7))
     sharpened_image=sharpe_Laplacian(img)
     cv2.imshow("BLURED IMAGE",img)
     cv2.imshow("Sharped IMAGE",sharpened_image)
     cv2.waitKey(0)
 def __test_3():
-    img=cv2.imread(r"D:\Learning\Learning_python\opencv\images\messi5.jpg")
+    img=cv2.imread("./images/messi5.jpg")
     img=cv2.blur(img,(7,7))
     sharpened_image=sharpe_Laplacian(img)
     cv2.imshow("BLURED IMAGE",img)
